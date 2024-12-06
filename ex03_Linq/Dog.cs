@@ -5,14 +5,14 @@
         public string Race;
         public string Name;
         public int Age;
-        public int Poids;
+        public int Weight;
 
         public Dog(string race, string name, int age, int poids)
         {
             Race = race;
             Name = name;
             Age = age;
-            Poids = poids;
+            Weight = poids;
         }
     }
 }
