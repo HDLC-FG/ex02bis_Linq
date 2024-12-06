@@ -16,6 +16,7 @@
             entiers.Where(x => x > 2 && x % 2 == 0 && x < 20 && x != 8).ToList().ForEach(Console.WriteLine);
 
             List<string> fruits = new List<string> { "Banane", "Ananas", "Cerise", "Framboise", "Groseilles", "Pomme", "Poire", "Tomate", "Kiwi", "Raisin", "Mangue", "Datte" };
+            
             Console.WriteLine("Tous les fruits dont le nom contient plus de 5 lettres");
             fruits.Where(x => x.Length > 5).ToList().ForEach(Console.WriteLine);
 
