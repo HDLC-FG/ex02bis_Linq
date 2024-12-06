@@ -1,4 +1,4 @@
-﻿namespace ex02bis_Linq
+﻿namespace ex03_Linq
 {
     internal class Program
     {
