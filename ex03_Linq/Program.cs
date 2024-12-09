@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 
 namespace ex03_Linq
 {
@@ -254,47 +254,47 @@ namespace ex03_Linq
 
             //Exercice 7 : Requêtes et group by multiple
             Console.WriteLine("\nExercice 7 : Requêtes et group by multiple\n");
-            List<Chien> chiens = new List<Chien>()
+            List<DogV2> dogsExo7 = new List<DogV2>()
             {
-                new Chien("Gnocci", "Gnoc Gnoc", "Labrador", "Sable", "M", 1, 20),
-                new Chien("Vagabond", "Gros Loup", "Labrador", "Noir", "M", 8, 25),
-                new Chien("Milou", "Milos", "Labrador", "Sable", "M", 10, 24),
-                new Chien("Sirène", "Sissy", "Labrador", "Sable","F", 4, 19),
-                new Chien("Félicia", "Felicci", "Labrador", "Sable", "F", 6, 20),
-                new Chien("Kratos", "Mon tueur", "Chihuahua", "Fauve", "M", 1, 2),
-                new Chien("Jack", "Jaja", "Chihuahua", "Fauve", "M", 1, 2),
-                new Chien("Mojave", "Mojojo", "Chihuahua", "Fauve", "M", 1, 2),
-                new Chien("Hercule", "Herc", "Chihuahua", "Beige", "M", 35, 2),
-                new Chien("Médusa", "Med", "Terre-Neuve", "Noire", "F", 6, 40),
-                new Chien("Mélusine", "Mel", "Terre-Neuve", "Noire", "F", 7, 41),
-                new Chien("Venus", "Violette", "Terre-Neuve", "Noire", "F", 8, 38),
-                new Chien("Letto", "Lele", "Berger Australien", "Bleu Merle", "M", 3, 30),
-                new Chien("Cabron", "Dum dum", "Berger Australien", "Bleu Merle", "M", 9, 31),
-                new Chien("Banzaï", "Zaïzaï", "Berger Australien", "Noir et blanc", "M", 1, 28 ),
-                new Chien("Haricot", "Harry", "Berger Australien", "Noir et blanc", "M", 2, 27),
-                new Chien("Gédéon", "Gégé", "Berger Allemand", "Noir et feu", "M", 9, 31),
-                new Chien("Bella", "Belbel", "Berger Allemand", "Noir et feu", "F", 5, 28),
-                new Chien("Oui-oui", "oui", "Berger Allemand", "Sable", "M", 7, 35),
-                new Chien("Pataud", "Patoche", "Carlin", "Sable", "M", 16, 8),
-                new Chien("Killer", "Kiki", "Carlin", "Sable", "M", 10, 8),
-                new Chien("Frank", "Colonel", "Carlin", "Noir", "M", 9, 9)
+                new DogV2("Gnocci", "Gnoc Gnoc", "Labrador", "Sable", "M", 1, 20),
+                new DogV2("Vagabond", "Gros Loup", "Labrador", "Noir", "M", 8, 25),
+                new DogV2("Milou", "Milos", "Labrador", "Sable", "M", 10, 24),
+                new DogV2("Sirène", "Sissy", "Labrador", "Sable","F", 4, 19),
+                new DogV2("Félicia", "Felicci", "Labrador", "Sable", "F", 6, 20),
+                new DogV2("Kratos", "Mon tueur", "Chihuahua", "Fauve", "M", 1, 2),
+                new DogV2("Jack", "Jaja", "Chihuahua", "Fauve", "M", 1, 2),
+                new DogV2("Mojave", "Mojojo", "Chihuahua", "Fauve", "M", 1, 2),
+                new DogV2("Hercule", "Herc", "Chihuahua", "Beige", "M", 35, 2),
+                new DogV2("Médusa", "Med", "Terre-Neuve", "Noire", "F", 6, 40),
+                new DogV2("Mélusine", "Mel", "Terre-Neuve", "Noire", "F", 7, 41),
+                new DogV2("Venus", "Violette", "Terre-Neuve", "Noire", "F", 8, 38),
+                new DogV2("Letto", "Lele", "Berger Australien", "Bleu Merle", "M", 3, 30),
+                new DogV2("Cabron", "Dum dum", "Berger Australien", "Bleu Merle", "M", 9, 31),
+                new DogV2("Banzaï", "Zaïzaï", "Berger Australien", "Noir et blanc", "M", 1, 28 ),
+                new DogV2("Haricot", "Harry", "Berger Australien", "Noir et blanc", "M", 2, 27),
+                new DogV2("Gédéon", "Gégé", "Berger Allemand", "Noir et feu", "M", 9, 31),
+                new DogV2("Bella", "Belbel", "Berger Allemand", "Noir et feu", "F", 5, 28),
+                new DogV2("Oui-oui", "oui", "Berger Allemand", "Sable", "M", 7, 35),
+                new DogV2("Pataud", "Patoche", "Carlin", "Sable", "M", 16, 8),
+                new DogV2("Killer", "Kiki", "Carlin", "Sable", "M", 10, 8),
+                new DogV2("Frank", "Colonel", "Carlin", "Noir", "M", 9, 9)
             };
 
             Console.WriteLine("1 - Faire un group by multiple sur la race et la couleur et trier par ordre croissant la race, puis la couleur");
-            chiens.OrderBy(x => x.Breed)
+            dogsExo7.OrderBy(x => x.Breed)
                 .ThenBy(x => x.Color)
                 .GroupBy(x => new { x.Breed, x.Color }, x => x.Name, (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
                 .ToList()
                 .ForEach(Console.WriteLine);
 
             Console.WriteLine("2 - Faire un group by multiple sur la couleur et le genre et trier par ordre croissant sur le genre");
-            chiens.OrderBy(x => x.Gender)
+            dogsExo7.OrderBy(x => x.Gender)
                 .GroupBy(x => new { x.Color, x.Gender }, x => x.Name, (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
                 .ToList()
                 .ForEach(Console.WriteLine);
 
             Console.WriteLine("3 - Faire un group by par genre, age, couleur...");
-            chiens.OrderBy(x => x.Gender)
+            dogsExo7.OrderBy(x => x.Gender)
                 .GroupBy(x => new { x.Gender, x.Age, x.Color }, x => x.Name, (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
                 .ToList()
                 .ForEach(Console.WriteLine);
