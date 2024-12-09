@@ -294,8 +294,11 @@ namespace ex03_Linq
                 .ForEach(Console.WriteLine);
 
             Console.WriteLine("3 - Faire un group by par genre, age, couleur...");
-            dogsExo7.OrderBy(x => x.Gender)
-                .GroupBy(x => new { x.Gender, x.Age, x.Color }, x => x.Name, (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
+            dogsExo7.Where(x => x.Age >= 2 && x.Age <= 15 && x.Name.Split(" ").Count() == 1)
+                .OrderBy(x => x.Gender)
+                .ThenByDescending(x => x.Age)
+                .ThenBy(x => x.Color)
+                .GroupBy(x => new { x.Gender, x.Age, x.Color }, x => $"{x.Name}({x.Breed})", (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
                 .ToList()
                 .ForEach(Console.WriteLine);
         }
