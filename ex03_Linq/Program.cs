@@ -187,10 +187,70 @@ namespace ex03_Linq
                     .OrderBy(y => y.FirstName)
                     .Select(y => new { initiale = $"{y.FirstName[0]}.{y.LastName[0]}" }
                 )
-                    .ToList()
-                    .ForEach(Console.WriteLine));
+                .ToList()
+                .ForEach(Console.WriteLine));
 
             Console.WriteLine("4 - Toutes les listes qui contiennent moins de 5 personnes et afficher toutes les personnes comme ceci : Nom+\" \"+Prenom");
+            personnesExo5.Where(x => x.Count < 5)
+                .ToList()
+                .ForEach(x => x
+                    .Select(y => new { initiale = $"{y.LastName} {y.FirstName}" }
+                )
+                .ToList()
+                .ForEach(Console.WriteLine));
+
+            //Exercice 6 : Requêtes et group by
+            Console.WriteLine("\nExercice 6 : Requêtes et group by\n");
+            List<Personne> personnesExo6 = new List<Personne>()
+            {
+                new Personne("Garett", "Ramzy", 45, "M"),
+                new Personne("Caire", "Joe", 35, "M"),
+                new Personne("Clay", "Alicia", 18, "F"),
+                new Personne("Bavette", "Simone", 68, "F"),
+                new Personne("Henry", "Thierry", 44, "M"),
+                new Personne("Jacquesonne", "Janett", 25, "F"),
+                new Personne("Buveur", "Joe", 25, "M"),
+                new Personne("Louet", "Karim", 31, "M"),
+                new Personne("Louette", "Karima", 31, "F"),
+                new Personne("Caire", "Paul", 19, "M"),
+                new Personne("Mille", "Camille", 20, "F"),
+                new Personne("Cent", "Camille", 40, "F"),
+                new Personne("Million", "Camille", 60, "M"),
+                new Personne("Gold", "Roger", 17, "M"),
+                new Personne("Lion", "Sandra", 8, "F"),
+                new Personne("René", "Jean", 6, "M")
+            };
+
+            Console.WriteLine("1 - Faire un group by sur le genre des personnes présentes dans la liste d'objets Personne()");
+            personnesExo6.GroupBy(x => x.Genre, x => x, (x, y) => new { Genre = x, Nombre = y.Count() })
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            Console.WriteLine("2 - Faire un group by sur l'âge des personnes et les trier par âge croissant");
+            personnesExo6.OrderBy(x => x.Age)
+                .GroupBy(x => x.Age, x => x, (x, y) => new { Age = x, Nombre = y.Count() })
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            Console.WriteLine("3 - Faire un group by sur le prénom des personnes, et afficher les noms de famille par prénom");
+            personnesExo6.Where(x => x.Age >= 18)
+                .OrderByDescending(x => x.FirstName)
+                .GroupBy(x => x.FirstName, x => x.LastName, (x, y) => new { NomDeFamille = string.Join(", ", y) })
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            List<int> nombresExo6 = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 20, 11, 13, 12, 14, 18, 17, 16, 14, 14 };
+
+            Console.WriteLine("4 - Grouper les éléments d'une liste de nombres. D'un côté les chiffres/nombres pairs, de l'autre ceux impairs");
+            nombresExo6.GroupBy(x => x % 2 == 0, x => x, (x, y) => new { Nombres = string.Join(", ", y) })
+               .ToList()
+               .ForEach(Console.WriteLine);
+
+            Console.WriteLine("5 - Grouper les individus par la première lettre de leur nom et faire un tri croissant sur l'attribut Nom de la classe Personne");
+            personnesExo6.OrderBy(x => x.LastName)
+                .GroupBy(x => x.LastName[0], x => $"{x.FirstName} {x.LastName}", (x, y) => new { Noms = string.Join(", ", y) })
+               .ToList()
+               .ForEach(Console.WriteLine);
         }
     }
 }
