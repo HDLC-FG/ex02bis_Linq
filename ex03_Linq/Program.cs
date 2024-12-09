@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 
 namespace ex03_Linq
 {
@@ -301,6 +301,85 @@ namespace ex03_Linq
                 .GroupBy(x => new { x.Gender, x.Age, x.Color }, x => $"{x.Name}({x.Breed})", (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
                 .ToList()
                 .ForEach(Console.WriteLine);
+
+            //Exercice 8 : Requêtes, group by et into
+            Console.WriteLine("\nExercice 8 : Requêtes, group by et into\n");
+            List<DogV2> dogsExo8 = new List<DogV2>()
+            {
+                new DogV2("Gnocci", "Gnoc Gnoc", "Labrador", "Sable", "M", 1, 20),
+                new DogV2("Vagabond", "Gros Loup", "Labrador", "Noir", "M", 8, 25),
+                new DogV2("Milou", "Milos", "Labrador", "Sable", "M", 10, 24),
+                new DogV2("Sirène", "Sissy", "Labrador", "Sable","F", 4, 19),
+                new DogV2("Félicia", "Felicci", "Labrador", "Sable", "F", 6, 20),
+                new DogV2("Kratos", "Mon tueur", "Chihuahua", "Fauve", "M", 1, 2),
+                new DogV2("Jack", "Jaja", "Chihuahua", "Fauve", "M", 1, 2),
+                new DogV2("Mojave", "Mojojo", "Chihuahua", "Fauve", "M", 1, 2),
+                new DogV2("Hercule", "Herc", "Chihuahua", "Beige", "M", 35, 2),
+                new DogV2("Médusa", "Med", "Terre-Neuve", "Noire", "F", 6, 40),
+                new DogV2("Mélusine", "Mel", "Terre-Neuve", "Noire", "F", 7, 41),
+                new DogV2("Venus", "Violette", "Terre-Neuve", "Noire", "F", 8, 38),
+                new DogV2("Letto", "Lele", "Berger Australien", "Bleu Merle", "M", 3, 30),
+                new DogV2("Cabron", "Dum dum", "Berger Australien", "Bleu Merle", "M", 9, 31),
+                new DogV2("Banzaï", "Zaïzaï", "Berger Australien", "Noir et blanc", "M", 1, 28 ),
+                new DogV2("Haricot", "Harry", "Berger Australien", "Noir et blanc", "M", 2, 27),
+                new DogV2("Gédéon", "Gégé", "Berger Allemand", "Noir et feu", "M", 9, 31),
+                new DogV2("Bella", "Belbel", "Berger Allemand", "Noir et feu", "F", 5, 28),
+                new DogV2("Oui-oui", "oui", "Berger Allemand", "Sable", "M", 7, 35),
+                new DogV2("Pataud", "Patoche", "Carlin", "Sable", "M", 16, 8),
+                new DogV2("Killer", "Kiki", "Carlin", "Sable", "M", 10, 8),
+                new DogV2("Frank", "Colonel", "Carlin", "Noir", "M", 9, 9)
+            };
+
+            Console.WriteLine("1 - Récupérer et afficher les chiens après avoir les avoir regrouper par leur race et les avoir trié par âge croissant sans utiliser orderby");
+            dogsExo8.Sort((x, y) => x.Age.CompareTo(y.Age));
+            dogsExo8.GroupBy(x => x.Breed, y => $"{y.Name}({y.Age})", (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            Console.WriteLine("2 - Regrouper les chiens par âge dans ageChiens...");
+            dogsExo8.Where(x => x.Age >= 2 && x.Age <= 15 && x.Name.Split(" ").Count() == 1)
+                .OrderBy(x => x.Age)
+                .GroupBy(x => x.Age, y => new DogsAge(y.Name, y.Age), (x, y) => new 
+                { 
+                    Age = x, 
+                    Names = string.Join(", ", y
+                        .GroupBy(x => x.Age % 2 == 0, y => y.Name, (x, y) => new 
+                        {
+                            EvenAge = x, 
+                            Names = string.Join(", ", y) 
+                        }
+                    ))
+                })                    
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            Console.WriteLine("3 - Faire un group by sur la race et la couleur des chiens et créer chiensRaceCouleur avec into, Trier les chiens par race et par couleur (ordre croissant)");
+            dogsExo8.OrderBy(x => x.Breed)
+                .ThenBy(x => x.Color)
+                .GroupBy(x => new
+                {
+                    x.Breed,
+                    x.Color
+                },
+                y => new DogBreedColor(y.Breed, y.Color),
+                (x, y) => new
+                {
+                    Race = x.Breed,
+                    Couleur = x.Color,
+                    Nombre = y.Count()
+                })
+                .ToList()
+                .ForEach(Console.WriteLine);
+            Console.WriteLine("--------------------------------------");
+            var request = from dog in dogsExo8
+                          orderby dog.Breed, dog.Color ascending
+                          group dog by new { dog.Breed, dog.Color } into result
+                          select new DogBreedColor(result.Key.Breed, result.Key.Color);
+
+            foreach (var dog in request)
+            {
+                Console.WriteLine($"{dog.Breed} {dog.Color}");
+            }
         }
     }
 }
