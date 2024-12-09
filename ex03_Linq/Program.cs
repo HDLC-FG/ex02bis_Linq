@@ -49,12 +49,12 @@ namespace ex03_Linq
             };
 
             Console.WriteLine("1 - Tous les noms des chiens qui sont de la race \"Berger Australien\"");
-            dogs.Where(x => x.Race.Equals("Berger Australien")).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
+            dogs.Where(x => x.Breed.Equals("Berger Australien")).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
 
             Console.WriteLine("2 - Tous les noms des chiens qui sont de la race \"Berger Australien\" et les trier par leur nom");
-            dogs.Where(x => x.Race.Equals("Berger Australien")).OrderBy(x => x.Name).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
+            dogs.Where(x => x.Breed.Equals("Berger Australien")).OrderBy(x => x.Name).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
 
-            Console.WriteLine("3 - Tous les noms des chiens âgés de 5 ans et plus, dont la longueur du nom est supérieure à 5 lettres");
+            Console.WriteLine("3 - Tous les noms des chiens âgés de 5 ans et plus, dont la longueur du nom est supérieure à 5 lettres...");
             dogs.Where(x => x.Age >= 5 && x.Name.Length > 5).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
 
             Console.WriteLine("4 - Les trier par leur poids");
@@ -64,7 +64,7 @@ namespace ex03_Linq
             dogs.OrderByDescending(x => x.Age).ThenBy(x => x.Weight).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
 
             Console.WriteLine("6 - Tous les noms des chiens dont le nom de race tient en un seul mot, leur poids doit être supérieur à 15 kilos, leur nom doit contenir un \"i\" et les trier par la longueur de leur prénom");
-            dogs.Where(x => x.Race.Split(" ").Count() == 1 && x.Weight > 15 && x.Name.Contains("i")).OrderBy(x => x.Name.Length).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
+            dogs.Where(x => x.Breed.Split(" ").Count() == 1 && x.Weight > 15 && x.Name.Contains("i")).OrderBy(x => x.Name.Length).Select(x => x.Name).ToList().ForEach(Console.WriteLine);
 
             //Exercice 3 : Requêtes créant de nouveaux objets
             Console.WriteLine("\nExercice 3 : Requêtes créant de nouveaux objets\n");
@@ -119,7 +119,7 @@ namespace ex03_Linq
                 return new { Nom_complet };
             }).ToList().ForEach(Console.WriteLine);
 
-            Console.WriteLine("2 - Pour les personnes majeures ayant moins de 50 ans :");
+            Console.WriteLine("2 - Pour les personnes majeures ayant moins de 50 ans...");
             personnesExo4.Where(x => x.Age >= 18 && x.Age < 50).Select(x =>
             {
                 var initiale = x.LastName[0] + "." + x.FirstName[0];
@@ -168,7 +168,7 @@ namespace ex03_Linq
                 .ToList()
                 .ForEach(x => Console.WriteLine($"{x.FirstName} {x.LastName}")));
 
-            Console.WriteLine("2 - Toutes personnes dont le nom contient un \"e\" et dont le prénom contient un \"a\"");
+            Console.WriteLine("2 - Toutes personnes dont le nom contient un \"e\" et dont le prénom contient un \"a\"...");
             personnesExo5.ForEach(x => x
                 .Where(x => x.LastName.Contains("e") && x.FirstName.Contains("a"))
                 .OrderByDescending(x => x.LastName)
@@ -176,7 +176,7 @@ namespace ex03_Linq
                 .ToList()
                 .ForEach(Console.WriteLine));
 
-            Console.WriteLine("3 - Toutes les listes qui contiennent plus de 4 personnes");
+            Console.WriteLine("3 - Toutes les listes qui contiennent plus de 4 personnes...");
             personnesExo5.Where(x => x.Count > 4)
                 .ToList()
                 .ForEach(x => x
@@ -232,10 +232,10 @@ namespace ex03_Linq
                 .ToList()
                 .ForEach(Console.WriteLine);
 
-            Console.WriteLine("3 - Faire un group by sur le prénom des personnes, et afficher les noms de famille par prénom");
+            Console.WriteLine("3 - Faire un group by sur le prénom des personnes, et afficher les noms de famille par prénom...");
             personnesExo6.Where(x => x.Age >= 18)
                 .OrderByDescending(x => x.FirstName)
-                .GroupBy(x => x.FirstName, x => x.LastName, (x, y) => new { NomDeFamille = string.Join(", ", y) })
+                .GroupBy(x => x.FirstName, x => x.LastName, (x, y) => new { NomsDeFamille = string.Join(", ", y) })
                 .ToList()
                 .ForEach(Console.WriteLine);
 
@@ -251,6 +251,53 @@ namespace ex03_Linq
                 .GroupBy(x => x.LastName[0], x => $"{x.FirstName} {x.LastName}", (x, y) => new { Noms = string.Join(", ", y) })
                .ToList()
                .ForEach(Console.WriteLine);
+
+            //Exercice 7 : Requêtes et group by multiple
+            Console.WriteLine("\nExercice 7 : Requêtes et group by multiple\n");
+            List<Chien> chiens = new List<Chien>()
+            {
+                new Chien("Gnocci", "Gnoc Gnoc", "Labrador", "Sable", "M", 1, 20),
+                new Chien("Vagabond", "Gros Loup", "Labrador", "Noir", "M", 8, 25),
+                new Chien("Milou", "Milos", "Labrador", "Sable", "M", 10, 24),
+                new Chien("Sirène", "Sissy", "Labrador", "Sable","F", 4, 19),
+                new Chien("Félicia", "Felicci", "Labrador", "Sable", "F", 6, 20),
+                new Chien("Kratos", "Mon tueur", "Chihuahua", "Fauve", "M", 1, 2),
+                new Chien("Jack", "Jaja", "Chihuahua", "Fauve", "M", 1, 2),
+                new Chien("Mojave", "Mojojo", "Chihuahua", "Fauve", "M", 1, 2),
+                new Chien("Hercule", "Herc", "Chihuahua", "Beige", "M", 35, 2),
+                new Chien("Médusa", "Med", "Terre-Neuve", "Noire", "F", 6, 40),
+                new Chien("Mélusine", "Mel", "Terre-Neuve", "Noire", "F", 7, 41),
+                new Chien("Venus", "Violette", "Terre-Neuve", "Noire", "F", 8, 38),
+                new Chien("Letto", "Lele", "Berger Australien", "Bleu Merle", "M", 3, 30),
+                new Chien("Cabron", "Dum dum", "Berger Australien", "Bleu Merle", "M", 9, 31),
+                new Chien("Banzaï", "Zaïzaï", "Berger Australien", "Noir et blanc", "M", 1, 28 ),
+                new Chien("Haricot", "Harry", "Berger Australien", "Noir et blanc", "M", 2, 27),
+                new Chien("Gédéon", "Gégé", "Berger Allemand", "Noir et feu", "M", 9, 31),
+                new Chien("Bella", "Belbel", "Berger Allemand", "Noir et feu", "F", 5, 28),
+                new Chien("Oui-oui", "oui", "Berger Allemand", "Sable", "M", 7, 35),
+                new Chien("Pataud", "Patoche", "Carlin", "Sable", "M", 16, 8),
+                new Chien("Killer", "Kiki", "Carlin", "Sable", "M", 10, 8),
+                new Chien("Frank", "Colonel", "Carlin", "Noir", "M", 9, 9)
+            };
+
+            Console.WriteLine("1 - Faire un group by multiple sur la race et la couleur et trier par ordre croissant la race, puis la couleur");
+            chiens.OrderBy(x => x.Breed)
+                .ThenBy(x => x.Color)
+                .GroupBy(x => new { x.Breed, x.Color }, x => x.Name, (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            Console.WriteLine("2 - Faire un group by multiple sur la couleur et le genre et trier par ordre croissant sur le genre");
+            chiens.OrderBy(x => x.Gender)
+                .GroupBy(x => new { x.Color, x.Gender }, x => x.Name, (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
+                .ToList()
+                .ForEach(Console.WriteLine);
+
+            Console.WriteLine("3 - Faire un group by par genre, age, couleur...");
+            chiens.OrderBy(x => x.Gender)
+                .GroupBy(x => new { x.Gender, x.Age, x.Color }, x => x.Name, (x, y) => new { Filtre = x, Names = string.Join(", ", y) })
+                .ToList()
+                .ForEach(Console.WriteLine);
         }
     }
 }

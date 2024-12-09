@@ -2,17 +2,17 @@
 {
     internal class Dog
     {
-        public string Race;
+        public string Breed;
         public string Name;
         public int Age;
         public int Weight;
 
-        public Dog(string race, string name, int age, int poids)
+        public Dog(string breed, string name, int age, int weight)
         {
-            Race = race;
+            Breed = breed;
             Name = name;
             Age = age;
-            Weight = poids;
+            Weight = weight;
         }
     }
 }
